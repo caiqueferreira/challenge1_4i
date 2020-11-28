@@ -7,12 +7,6 @@ output:
 
 
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
 ## Challenge 1
 
 We begin by selecting the diretory and then we open the data file.
@@ -22,7 +16,7 @@ setwd("C:/Users/Caique/Desktop/Mestrado_FEARP/Processo_seletivo/4intelligence")
 tfpdata = read.csv("C:/Users/Caique/Desktop/Mestrado_FEARP/Processo_seletivo/4intelligence/Challenge_4i/TFP.csv")
 ```
 
-Two important R packages for our analysis are "tydeverse" and "lubridate"
+Two important R packages for our analysis are "tydeverse" and "lubridate".
 
 
 ```r
@@ -71,7 +65,7 @@ tfpdata$year = as.Date(ISOdate(as.character(tfpdata$year),1,1))
 
 The first plot shows the evolution of the total factor productivity (TFP) through the years, as we make separate graphs for the three different countries (Canada, Mexico, and United States). 
 
-Note that the Canada TFP evolution is the most stable. For Mexico, there is a strong variation, as the TFP increases from 1950 until 1981 and then decreases very significantly until 2011, with small periods of growth. The USA TFP has a strong positive trend, as it increases from 1950 until 2011 with slight periods of stagnation.
+Note that the Canada TFP evolution is the most stable. For Mexico, there is a strong variation, as the TFP increases from 1950 until 1981 and then decreases very significantly until 2011, with small periods of growth. The USA TFP has a strong positive trend, as it increases from 1950 until 2011 with small periods of stagnation.
 
 ```r
 ggplot(tfpdata,aes(x=year(year),y=rtfpna,group=1)) +
@@ -104,7 +98,7 @@ usadata = filter(tfpdata,isocode=="USA")
 mexdata = filter(tfpdata,isocode=="MEX")
 ```
 
-Now we present the statistics description (adding standard deviations) for the whole data set, and then we show the same statistics separated by country. The statistics confirm the graphic analysis, as Mexico's stantard deviation is the greater one, followed by USA's. Mexico also presents the larger TFP mean, median, and maximum value.
+Now we present the statistics description (adding standard deviations) for the whole data set, and then we show the same statistics for each country. The statistics confirm the graphic analysis, as Mexico's stantard deviation is the greater one, followed by USA's. Mexico also presents the larger TFP mean, median, and maximum value.
 
 ```r
 # The whole data
@@ -181,7 +175,7 @@ sd(mexdata$rtfpna)
 ## [1] 0.158209
 ```
 
-Finally, we present histograms. The first one considers the whole TFP data and then we have three different TFP histograms, separated by country. In the first histogram, the majority of the values concentrate around the mean (0.995).
+Finally, we present the histograms. The first one considers the whole TFP data and then we have three different TFP histograms, separating by country. In the first histogram, the majority of the values concentrate around the mean (0.995).
 
 ```r
 ggplot(tfpdata) +
@@ -192,7 +186,7 @@ ggplot(tfpdata) +
 
 ![](challenge_1_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
-When observing the countries separately, the greater variation of Mexico and USA is clear, compared to Canada.
+When observing the countries separately, the greater variation of Mexico and USA, compared to Canada, is clear.
 
 ```r
 ggplot(tfpdata) +
@@ -213,9 +207,9 @@ We begin the forecasting section by installing the "forecast" package.
 library(forecast)
 ```
 
-We choose two forecasting procedures, ARIMA and ETS, considering the three countries separately. Both ARIMA and ETS model the time series automatically, as we are not analysing the data deeply enough to sort out what the best models to use. First, the ARIMA forecasts.
+We choose two forecasting procedures, ARIMA and ETS, considering the three countries separately. Both ARIMA and ETS model the time series automatically, as we are not analysing the data deeply enough to sort out what the best models to use. Let's begin with the the ARIMA forecasts.
 
-Note that the ARIMA approach forecasts a decreasing TFP for the ten years after 2011.
+For Canada, that the ARIMA approach forecasts a decreasing TFP for the ten years after 2011.
 
 ```r
 # Canada forecast - ARIMA
@@ -239,7 +233,7 @@ mexdata$rtfpna %>%
 
 ![](challenge_1_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
 
-Considering the USA, the ARIMA forecasts a TFP increase for the next ten years. 
+Considering the USA, the ARIMA forecasts an increasing TFP for the next ten years. 
 
 ```r
 # USA forecast - ARIMA
@@ -263,7 +257,7 @@ candata$rtfpna %>%
 
 ![](challenge_1_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
 
-Similar to the ARIMAm, the ETS forecasts slighly decreasing TFP values for Mexico.
+Similar to the ARIMA, the ETS forecasts slighly decreasing TFP values for Mexico.
 
 ```r
 # Mexico forecast - ETS
@@ -275,7 +269,7 @@ mexdata$rtfpna %>%
 
 ![](challenge_1_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
 
-For the USA, the ETS forecasts increasing TFP values, just like the ARIMA, as well.
+For the USA, the ETS forecasts increasing TFP values, just like the ARIMA.
 
 ```r
 # USA forecast - ETS
@@ -289,7 +283,7 @@ usadata$rtfpna %>%
 
 ## 3 - Explaining the TFP
 
-In the previous exercises, we only used TFP past values to construct its forecasts. Now we can pick other variables that could help us explaining the TFP behavior. Productivity is very related to GDP or GDP per capita, so that we might expect that the same factors influencing the GDP per capita will influence the TFP. The most "classic" variables that affects GDP per capita (and, therefore, productivity) are education, openess, institutions, investment (which is related to capital stock), and many others. Therefore, we will try to find these type of variables to explain the TFP. Observing the original list of variables, we choose the following.
+In the previous exercises, we only used TFP past values to construct its forecasts. Now we can pick other variables that could help us explaining the TFP behavior. Productivity is very related to GDP or GDP per capita, so that we might expect that the same factors influencing the GDP per capita will influence the TFP. The most "classic" variables that affects GDP per capita (and, therefore, productivity) are education, openess, institutions, investment (which is related to capital stock), and some others. Therefore, we will try to find these type of variables to explain the TFP. Observing the original list of variables, we choose the following.
 
 hc - Index of human capital per person, based on years of schooling (Barro and Lee 2013) and returns to education (Psacharopoulos 1994).
 
